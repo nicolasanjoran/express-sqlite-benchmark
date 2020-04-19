@@ -15,12 +15,22 @@ db.exec('CREATE TABLE IF NOT EXISTS test(userid varchar(100) not null, name varc
 //db.exec("DELETE FROM TEST");
 
 const stmt = db.prepare('INSERT INTO test(userid, name, age) VALUES(@uid,@name,@age)')
+const select = db.prepare('SELECT * FROM test LIMIT 1;')
+
 const bodyParser = require('body-parser')
 const app = express()
 app.use(bodyParser.json())
 
 app.get('/', function (req, res) {
   res.send('Hello World!')
+})
+
+
+app.get('/user', async (req, res) => {
+	
+	let result = select.get()
+	res.send(result)
+
 })
 
 app.post('/user', async (req, res) => {
